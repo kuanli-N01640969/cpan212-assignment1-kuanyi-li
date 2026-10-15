@@ -14,8 +14,16 @@ async function fetchJson(url, serviceName) {
       throw new HttpError(502, `Could not get a valid response from the ${serviceName} service`);
     }
     return await res.json(); //Parsed Json
-  } 
-}
+  } catch(err) {
+    //Open-meteo didn't answer within timeout
+    if (err.name ===  'TimeoutError'){
+      throw new HttpError(504, `The ${serviceName} servce did not respond within ${config.upstreamTimeoutMs} ms`);
+    }
+    //Network failure
+    throw new HttpError(502, `Could not get a valid response from the ${serviceName} service`);
+  }
+} 
+
 //   - fetch resolves for every HTTP status, so check res.ok yourself.
 //   - Turn every failure into an HttpError: 504 when the timeout fired
 //     (err.name is 'TimeoutError'), 502 for a network failure, a status that
