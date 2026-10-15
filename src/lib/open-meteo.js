@@ -17,7 +17,11 @@ async function fetchJson(url, serviceName) {
   } catch(err) {
     //Open-meteo didn't answer within timeout
     if (err.name ===  'TimeoutError'){
-      throw new HttpError(504, `The ${serviceName} servce did not respond within ${config.upstreamTimeoutMs} ms`);
+      throw new HttpError(504, `The ${serviceName} service did not respond within ${config.upstreamTimeoutMs} ms`);
+    }
+    //Preserve existing errors
+    if (err instanceof HttpError) {
+      throw err;
     }
     //Network failure
     throw new HttpError(502, `Could not get a valid response from the ${serviceName} service`);
@@ -54,7 +58,18 @@ export async function geocodeCity(name) {
 }
 
 // TODO (you): get the current weather and a 3-day daily forecast from the
-// forecast API and return the parsed response.
 export async function getForecast(latitude, longitude) {
-  throw new Error('getForecast is not written yet');
+  //Combine base url, endpoint and the query parameters
+  const params = new URLSearchParams({
+    latitude,
+    longitude,
+    current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code',
+    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+    timezone: 'auto',
+    forecast_days: 3,
+  })
+  //Combine base url, endpoint and the query parameters
+  const url = `${config.forecastUrl}/forecast?${params}`;
+  //fetch data
+  return await fetchJson(url, 'forecast');
 }
