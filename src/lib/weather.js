@@ -7,9 +7,6 @@ import { TtlCache } from './cache.js';
 const weatherCache = new TtlCache(config.cacheTtlSeconds);
 
 // TODO (you): return the weather summary for one city, in the shape shown on
-// the assignment page. Check the cache first. On a miss, geocode the city, get
-// the forecast, build the summary, store it, and return it with cached: false.
-// On a hit, return the stored summary with cached: true.
 export async function getCityWeather(city) {
   //uniform cache entry
   const trimmedName = city.trim();
@@ -59,8 +56,12 @@ export async function getCityWeather(city) {
     fetchedAt: new Date().toISOString,
     cached: false,
   };
+  //Only save successful lookups in cache
+  weatherCache.set(cacheKey, summary);
+  return summary;
 }
+
 // TODO (you): return the cache statistics for GET /api/cache/stats.
 export function getCacheStats() {
-  throw new Error('getCacheStats is not written yet');
+  return weatherCache.stats();
 }
