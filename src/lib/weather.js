@@ -18,7 +18,10 @@ export async function getCityWeather(city) {
   const cachedSummary = weatherCache.get(cacheKey);
   if (cachedSummary){
     return{...cachedSummary, cached:true};
-  };
+  }
+  //No cache, require geocode city then forecast
+  const locatoin = await geocodeCity(trimmedName);
+  const forecast = await getCityWeather(location.latitude, location.longitude);
 }
 // TODO (you): return the cache statistics for GET /api/cache/stats.
 export function getCacheStats() {
