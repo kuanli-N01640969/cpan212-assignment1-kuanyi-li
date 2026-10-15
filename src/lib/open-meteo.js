@@ -13,6 +13,7 @@ async function fetchJson(url, serviceName) {
     if (!res.ok){
       throw new HttpError(502, `Could not get a valid response from the ${serviceName} service`);
     }
+    return await res.json(); //Parsed Json
   } 
 }
 //   - fetch resolves for every HTTP status, so check res.ok yourself.
