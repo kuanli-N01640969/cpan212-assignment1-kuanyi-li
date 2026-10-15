@@ -7,7 +7,7 @@ export function errorHandler(err, req, res, next) {
   }
 
   // TODO (you): when err is an HttpError, respond with err.status and
-  //Checks whether the error is an instance of our custom HttpError class.
+  //Checks whether the error is an instance of our custom HttpError class
   if (err instanceof HttpError){
     return res.status(err.status).json({
       error: {      
