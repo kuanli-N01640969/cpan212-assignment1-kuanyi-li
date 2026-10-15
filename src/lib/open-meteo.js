@@ -5,11 +5,14 @@ import { HttpError } from './http-error.js';
 // The exact requests are on the assignment page.
 
 // TODO (you): write a helper that fetches a URL and returns the parsed JSON.
-//   - Pass signal: AbortSignal.timeout(config.upstreamTimeoutMs) to fetch.
 async function fetchJson(url, serviceName) {
   try {
     //Pass AbortSignal
     const res = await fetch(url, {signal: AbortSignal.timeout(config.upstreamTimeoutMs),});
+    //Self-check res.ok
+    if (!res.ok){
+      throw new HttpError(502, `Could not get a valid response from the ${serviceName} service`);
+    }
   } 
 }
 //   - fetch resolves for every HTTP status, so check res.ok yourself.
