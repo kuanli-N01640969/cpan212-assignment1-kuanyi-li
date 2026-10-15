@@ -1,9 +1,11 @@
 import { config } from '../config.js';
 import { geocodeCity, getForecast } from './open-meteo.js';
 import { describeWeatherCode } from './weather-codes.js';
+import { TtlCache } from './cache.js';
 
 // TODO (you): create one cache for the whole app, with a time to live of
 // config.cacheTtlSeconds.
+const weatherCache = new TtlCache(config.cacheTtlSeconds);
 
 // TODO (you): return the weather summary for one city, in the shape shown on
 // the assignment page. Check the cache first. On a miss, geocode the city, get
