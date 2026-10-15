@@ -10,7 +10,7 @@ const weatherCache = new TtlCache(config.cacheTtlSeconds);
 export async function getCityWeather(city) {
   //uniform cache entry
   const trimmedName = city.trim();
-  const cacheKey = trimmedName.toLowercase();
+  const cacheKey = trimmedName.toLowerCase();
   //Check if cache exists
   const cachedSummary = weatherCache.get(cacheKey);
   if (cachedSummary){
@@ -18,7 +18,7 @@ export async function getCityWeather(city) {
   }
   //No cache, require geocode city then forecast
   const location = await geocodeCity(trimmedName);
-  const forecast = await getCityWeather(location.latitude, location.longitude);
+  const forecast = await getForecast(location.latitude, location.longitude);
   //Forcast array
   const daily = [];
   for (let i = 0; i < forecast.daily.time.length; i++){
@@ -53,7 +53,7 @@ export async function getCityWeather(city) {
       conditions: describeWeatherCode(forecast.current.weather_code),  
     },
     daily,
-    fetchedAt: new Date().toISOString,
+    fetchedAt: new Date().toISOString(),
     cached: false,
   };
   //Only save successful lookups in cache
