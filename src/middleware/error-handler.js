@@ -7,7 +7,15 @@ export function errorHandler(err, req, res, next) {
   }
 
   // TODO (you): when err is an HttpError, respond with err.status and
-  // { error: { message: err.message, details: err.details } }.
+  //Checks whether the error is an instance of our custom HttpError class.
+  if (err instanceof HttpError){
+    return res.status(err.status).json({
+      error: {      
+        message: err.message,
+        details: err.details,
+      }
+    });
+  }
 
   // Anything else is a bug. The details go to the terminal, never to the client.
   console.error(err);

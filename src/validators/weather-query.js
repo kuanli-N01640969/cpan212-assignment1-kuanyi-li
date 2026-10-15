@@ -24,7 +24,6 @@ export function parseCity(value) {
 }
 
 // TODO (you): check ?cities= and return an array of trimmed city names. Throw a
-// 400 HttpError with details.cities when it breaks a rule from the assignment page.
 export function parseCities(value) {
   //Prevent duplicate value
   if (Array.isArray(value)) {
